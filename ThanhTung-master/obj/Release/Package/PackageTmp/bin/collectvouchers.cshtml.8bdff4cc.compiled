@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="2" virtualPath="/Views/Order/CollectVouchers.cshtml" hash="278a79f9" filehash="ffffc22710860488" flags="110000" assembly="App_Web_q35mfpoi" type="ASP._Page_Views_Order_CollectVouchers_cshtml">
+    <filedeps>
+        <filedep name="/Views/Order/CollectVouchers.cshtml" />
+    </filedeps>
+</preserve>

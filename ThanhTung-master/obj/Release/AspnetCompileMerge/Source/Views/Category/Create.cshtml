@@ -1,0 +1,38 @@
+﻿@model AdminModel
+@{
+    Layout = null;
+}
+<form id="FrmCrPO" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+      title="@ViewBag.Title" action="@Model.Url" class="form-horizontal bv-form validateForm useScrollBar" method="post" novalidate="novalidate">
+    <div class="container-fluid">
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Tên danh mục")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Name", Model.Category.Name, "Tên danh mục", "Tên loại danh mục", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Mã")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Code", Model.Category.Code, "Mã", "Mã", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Mô tả")</label>
+            <div class="col-lg-8">
+                <textarea placeholder="@string.Format("Mô tả")" class="form-control"cols="2" rows="2" name="Describes">@Model.Category.Describes
+                </textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <p id="messeage_err" class="red"></p>.
+                <input type="hidden" value="@Model.Category.IDCategoryType" name="IDCategoryType" />
+                <input type="hidden" value="@Model.Category.ID" name="ID" />
+                <input type="hidden" value="@Model.Category.Parent" name="Parent" />
+                <button type="submit" class="btn btn-info btn-sm">@string.Format("Xong")</button>
+            </div>
+        </div>
+    </div>
+</form>
+

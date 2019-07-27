@@ -1,0 +1,54 @@
+﻿@model OrderModel
+@{
+    Layout = null;
+}
+<form id="FrmIRV" action="@Model.Url" title="@ViewBag.Title"
+      accept-charset="utf-8" enctype="multipart/form-data" class="form-horizontal form-group-sm frm-df frm-rm form-delete quickSubmit" method="POST">
+    <div class="container-fluid pt-0">
+        <div class="form-group form-group-title">
+            <div class="col-sm-12 txtct">
+                <label class="control-label title">@ViewBag.Title</label>
+            </div>
+        </div>
+        <div class="form-group form-group-name">
+            <div class="col-sm-12 txtct ">
+                <label class="control-label name center" title=""><b>@ViewBag.IRVContent</b> </label>
+            </div>
+        </div>
+        <div class="form-group form-group-name">
+            <div class="col-sm-3 txtct ">
+                <a class="clickInputFile" href="#"
+                   data-click="#upfile_normal"
+                   data-size="1" data-type="append"
+                   data-target="#OrderFileUpload_@Model.Order.ID">
+                    <i aria-hidden="true" title="Tải file" class="btn fa fa-download btn-primary "></i>
+                </a>
+            </div>
+            <div class="col-sm-9 txtct ">
+                <div id="OrderFileUpload_@Model.Order.ID" class="files aa_upload_file file-up">
+                    @if (!Equals(Model.OrderFile, null) && Model.OrderFile.ID>0)
+                    {
+                        var fileName = Model.OrderFile.FileName;
+                        var path = Model.OrderFile.Path;
+                        var fullPath = SystemConfig.GetValueByKey("FileFolder") + @"\" + path;
+                        var link = "/UpFileNormal/Download?Path=" + fullPath + "&FileName=" + fileName;
+                        <span class="fileitem member sortitem">
+                            <a class="text-left openLink" href="@link" title="">@fileName</a>
+                            <input type="hidden" name="FileName" class="fileNames" value="@fileName">
+                            <input name="Path" class="filePaths" type="hidden" value="@path">
+                            <button type="button" class="btn btn-xs btn-link close delMemberCust">x</button>
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="col-sm-12 txtct">
+                <p id="messeage_err" class="red"></p>
+                <input type="hidden" name="ID" value="@Model.Order.ID" />
+                <button class="btn btn-success  btn-sm" type="submit">@string.Format("Xác nhận")</button>
+                <button class="btn btn-default btn-sm closeDialog" type="button">@string.Format("Hủy")</button>
+            </div>
+        </div>
+    </div>
+</form>

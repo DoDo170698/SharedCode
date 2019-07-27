@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <title>@string.Format("Quản lý đơn hàng")</title>
+    <meta name="description" content="Dashboard" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    @Styles.Render("~/Assets/bootstrap/css.css")
+    @Styles.Render("~/Assets/jquery/css.css")
+    @Styles.Render("~/Assets/app/css/ionicons.min.css")
+    @Styles.Render("~/Assets/beyond/css.css")
+    @Styles.Render("~/pdf/css.css")
+    @Styles.Render("~/Assets/app/css/icons.css")
+    @Styles.Render("~/Assets/app/css.css")
+
+</head>
+<body>
+    @Html.Partial("Header")
+    <div class="main-container container-fluid">
+        <div class="page-container">
+            <form action="/UpFileNormal/UpFile" id="form-up-file" class="hidden" enctype="multipart/form-data" method="post">
+                <input type="file" name="FileName" class="hidden" id="upfile_normal" />
+                <input type="hidden" name="Target" class="hidden" id="upfile_normal_Target" />
+                <button type="submit"></button>
+            </form>
+            <div class="page-sidebar newfeed" id="sidebar">
+                @Html.Partial("Left")
+            </div>
+            <div id="Section" class="page-content">
+                @Html.Partial("Message")
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div id="Overlay" class="overlay"><sub></sub></div>
+    <div class="hidden">
+        <input type="file" class="hidden" id="InputAvatar" multiple="multiple" />
+        <input type="file" class="inputUpFile" id="AttachFile" data-bv-notempty-message="@string.Format("Tên file không được trống")" />
+        <input type="file" class="inputUpFile" id="AttachFiles" multiple="multiple" data-bv-notempty-message="@string.Format("Tên file không được trống")" />
+        <textarea id="CDATA" class="hidden"></textarea>
+    </div>
+    @Scripts.Render("~/Assets/jquery/js.js")
+    @Scripts.Render("~/Assets/bootstrap/js.js")
+    @Scripts.Render("~/pdf/js.js")
+    @Scripts.Render("~/Assets/beyond/js.js")
+    @Scripts.Render("~/Assets/app/js.js")
+    <script src="~/Assets/app/js/upfile_normal.js"></script>
+    @RenderSection("scripts", false)
+</body>
+</html>

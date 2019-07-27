@@ -1,0 +1,292 @@
+﻿@model OrderModel
+<div class="DTTT btn-group">
+    @if (Equals(Model.SearchParam.ViewName, "Payed") || Model.SearchParam.Status <= (int)(Enums.OrderStatus.Receive))
+    {
+        <a title="@string.Format("Xóa")" data-href="/AmountOrder/IsDeletes"
+           class="btn btn-danger hidden actMultiTicks quickDeletes" aria-controls="searchable">
+            <i class="fa fa-trash no-margin" aria-hidden="true"></i> @string.Format("Xóa")
+        </a>
+    }
+    @if (Equals(Model.SearchParam.ViewName, "Receive"))
+    {
+        <a title="@string.Format("Tạo mới")" data-target=".ui-dialog:visible" href="/AmountOrder/create"
+           class="btn btn-info quickUpdate" aria-controls="searchable">
+            <i class="fa fa-plus" aria-hidden="true"></i> @string.Format("Tạo mới")
+        </a>
+        <div class="btn-group">
+            <a href="javascript:;" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle" aria-expanded="false"><i class="fa fa-cloud-download"></i>@string.Format("Export")  <i class="fa fa-angle-down"></i></a>
+            <ul class="dropdown-menu dropdown-blue dropdown-menu-right">
+                <li class="">
+                    <a target="_blank" class="btn-xs btn-info" title="PDF" href="@(Utils.GenLinkExport(string.Format("/export/OrderExportPDF?"),Model.SearchParam))">
+                        <i class="glyphicon glyphicon-download"></i>  @string.Format("PDF")
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    }
+</div>
+
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center auto">@string.Format("Tên đơn hàng")</th>
+                <th class="center wpx250">@string.Format("Thông tin đặt hàng")</th>
+                <th class="center wpx160">@string.Format("Thông tin người đặt hàng")</th>
+                <th class="center wpx80">@string.Format("Trạng thái")</th>
+                @if (!Equals(Model.SearchParam.ListStatus, null)
+                   && (
+                      Model.SearchParam.ListStatus.Contains((int)(Enums.OrderStatus.Payed))
+                    || Model.SearchParam.ListStatus.Contains((int)(Enums.OrderStatus.PayedConfirm)))
+                   )
+                {
+                    <th class="center wpx150">@string.Format("Đia điểm chuyển tiền")</th>
+                }
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(Model.Orders, null))
+            {
+                var stt = ViewBag.Paging.PageStart;
+                var sameDate = new DateTime().Date;
+                var countDate = 0;
+                foreach (var item in Model.Orders)
+                {
+                    stt++;
+
+                    var updateLink = string.Format("/AmountOrder/update?Status={0}", item.Status);
+                    var deleteLink = "/AmountOrder/IsDelete";
+                    var deliveryLink = string.Format("/AmountOrder/IsDelivery?Status={0}", item.Status);
+                    var detailLink = string.Format("/AmountOrder/Detail?ID={0}&ViewName={1}&ListStatus={2}", item.ID, Model.SearchParam.ViewName, CUtils.GetListStatus(item.Status));
+                    var IRVReturnLink = string.Format("/AmountOrder/IsIRVReturn");
+                    var collectVoucherrLink = string.Format("/AmountOrder/IsCollectVouchers?IsCollect=1");
+                    var accountingDeptLink = string.Format("/AccountingDept/Create?Type={0}", (int)(Enums.OrderType.Amount));
+                    var payedLink = string.Format("/AmountOrder/IsPayed");
+
+                    var isReceive = item.Status <= (int)Enums.OrderStatus.Receive;
+                    var isUpdate = isReceive;
+                    var viewName = Model.SearchParam.ViewName;
+                    if (sameDate == item.PODate.Value.Date)
+                    {
+                        countDate++;
+                    }
+                    else
+                    {
+                        sameDate = item.PODate.Value.Date;
+                        countDate = 0;
+                    }
+                    <tr class="tr-date">
+                        <td class="center">
+                            @stt
+                            @if (countDate == 0 && Equals(viewName.ToLower(), "Receive".ToLower()))
+                            {
+                                @Html.Partial("DateAnimation", Utils.DateToString(item.PODate, "dd-MM-yyyy"))
+                            }
+                        </td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                @item.PONo
+                            </label>
+                        </td>
+                        <td>
+                            <ul class="ul_order_info">
+                                <li>
+                                    Ngày đặt hàng :
+                                    <span class="font-weight-bold">
+                                        @if (!Equals(item.PODate.Value, null))
+                                        {
+                                            <span>@item.PODate.Value.ToString("dd-MM-yyyy")-</span>
+                                            <span>@item.PODate.Value.ToString("HH:mm")</span>
+                                        }
+
+                                    </span>
+                                </li>
+                                <li>
+                                    Ngày giao hàng :
+                                    <span class="font-weight-bold">
+                                        @if (!Equals(item.PODate.Value, null))
+                                        {
+                                            <span>@item.DeliveryDate.Value.ToString("dd-MM-yyyy")-</span>
+                                            <span>@item.DeliveryDate.Value.ToString("HH:mm")</span>
+                                        }
+                                    </span>
+                                </li>
+                                <li>
+                                    Địa chỉ giao hàng :
+                                    <span class="font-weight-bold">@item.Address</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="project_items">
+                                <div class="user-info">
+                                    <span class="ui fix-table">
+                                        <span class="clearfix">
+                                            Tên: @item.Purchaser
+                                        </span>
+                                        <span class="clearfix">
+                                            SĐT: @item.Tel
+                                        </span>
+                                        <span class="clearfix">
+                                            Email: @item.Email
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="center">
+                            <a href=@CUtils.GetLinkByStatus(item.Status,"AmountOrder")>
+                                @CUtils.RenderOderStatus(item.Status)
+                            </a>
+                        </td>
+                        @if (!Equals(Model.SearchParam.ListStatus, null)
+                  && (
+                     Model.SearchParam.ListStatus.Contains((int)(Enums.OrderStatus.Payed))
+                   || Model.SearchParam.ListStatus.Contains((int)(Enums.OrderStatus.PayedConfirm)))
+                  )
+                        {
+                            <td>@item.PayedPlace</td>
+                        }
+                        <td class="text-center wpx120">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+                                        <li>
+                                            <a class="" data-target=".ui-dialog:visible" href="@detailLink"><i aria-hidden="true" title="@string.Format("Xem chi tiết")" class="fa fa-eye btn-success"></i> <span>@string.Format("Xem chi tiết")</span></a>
+                                        </li>
+                                        @if (Equals(viewName, "Receive") || Equals(viewName, "Delivery"))
+                                        {
+                                            <li>
+                                                <a class="quickUpdate @(isUpdate?"":"bg-gray")" data-target=".ui-dialog:visible" data-id="@item.ID" href="@updateLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil @(isUpdate?"btn-primary":"")"></i> <span>@string.Format("Cập nhật")</span></a>
+                                            </li>
+                                        }
+
+                                        @if (Equals(viewName, "Receive"))
+                                        {
+                                            <li>
+                                                <a class="quickUpdate @(isReceive ?"":"bg-gray")" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deliveryLink"><i aria-hidden="true" title="@string.Format("Giao hàng")" cla class="fa fa-arrow-right @(isReceive ?"btn-warning":"")"></i> <span>@string.Format("Giao hàng")</span></a>
+                                            </li>
+                                        }
+                                        else if (Equals(viewName, "Delivery"))
+                                        {
+                                            <li>
+                                                <a class="quickDelete @(isReceive ?"":"bg-gray")" data-id="@item.ID" data-target=".ui-dialog:visible" href="@IRVReturnLink"><i aria-hidden="true" title="@string.Format("Xác nhận trả phiếu nhập kho")" cla class="fa fa-arrow-right @(isReceive ?"":"label-green") "></i> <span>@string.Format("Xác nhận trả phiếu nhập kho")</span></a>
+                                            </li>
+                                        }
+                                        else if (Equals(viewName, "IRVReturn"))
+                                        {
+                                            <li>
+                                                <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@IRVReturnLink"><i aria-hidden="true" title="@string.Format("Cập nhật phiếu nhập kho")" class="fa fa-pencil label-green"></i> <span>@string.Format("Cập nhật phiếu nhập kho")</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="quickDelete @(isReceive ?"":"bg-gray")" data-id="@item.ID" data-target=".ui-dialog:visible" href="@collectVoucherrLink"><i aria-hidden="true" title="@string.Format("Xác nhận thu thập chứng từ")" cla class="fa fa-arrow-right @(isReceive ?"":"btn-azure") "></i> <span>@string.Format("Xác nhận thu thập chứng từ")</span></a>
+                                            </li>
+                                        }
+                                        else if (Equals(viewName, "CollectVouchers"))
+                                        {
+                                            <li>
+                                                <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@collectVoucherrLink"><i aria-hidden="true" title="@string.Format("Cập nhật chứng từ")" cla class="fa fa-pencil btn-azure "></i> <span>@string.Format("Cập nhật chứng từ")</span></a>
+                                            </li>
+                                            var isCollect = item.Status == (int)(Enums.OrderStatus.CollectVouchers);
+
+                                            if (isCollect)
+                                            {
+                                                if (!Equals(Model.IDOrders, null) && Model.IDOrders.Contains(item.ID))
+                                                {
+                                                    var adUpdateLink = string.Format("/AccountingDept/Update");
+                                                    <li>
+                                                        <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@adUpdateLink"><i aria-hidden="true" title="@string.Format("Gửi lại phòng kế toán")" cla class="fa fa-arrow-right @(isReceive ?"":"btn-danger") "></i> <span>@string.Format("Gửi lại phòng kế toán")</span></a>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+
+                                                    <li>
+                                                        <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@accountingDeptLink"><i aria-hidden="true" title="@string.Format("Gửi đến phòng kế toán")" cla class="fa fa-arrow-right @(isReceive ?"":"btn-violet") "></i> <span>@string.Format("Gửi đến phòng kế toán")</span></a>
+                                                    </li>
+                                                }
+                                            }
+
+                                        }
+                                        else if (Equals(viewName, "Payed"))
+                                        {
+                                            var payedConfirm = item.Status == (int)(Enums.OrderStatus.PayedConfirm);
+                                            var payedConfirmLink = string.Format("/AmountOrder/IsPayedConfirm");
+                                            if (!payedConfirm)
+                                            {
+                                                if (!Equals(Model.IDOrders, null) && Model.IDOrders.Contains(item.ID))
+                                                {
+                                                    <li>
+                                                        <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@payedConfirmLink"><i aria-hidden="true" title="@string.Format("Xác nhận thanh toán hóa đơn")" class="fa fa-check btn-darksuccess"></i> <span>@string.Format("Xác nhận thanh toán hóa đơn")</span></a>
+                                                    </li>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                var replaceLink = string.Format("/Order/IsPayedReplace");
+                                                <li>
+                                                    <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@replaceLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil btn-primary"></i> <span>@string.Format("Cập nhật")</span></a>
+                                                </li>
+                                            }
+                                        }
+
+                                        @if (item.Status <= (int)Enums.OrderStatus.Receive || (Equals(viewName, "Payed") && item.Status == (int)(Enums.OrderStatus.PayedConfirm)))
+                                        {
+                                            <li>
+                                                <a class="quickDelete" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deleteLink"><i aria-hidden="true" title="@string.Format("Xóa")" cla class="fa fa-trash-o btn-danger"></i> <span>@string.Format("Xóa")</span></a>
+                                            </li>
+
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+
+        @if (Model.Orders.Count <= 0)
+        {
+            <div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có đơn hàng nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                    <div>
+                        <strong class="gray">
+                            @string.Format("Có tổng số {0} đơn hàng", ViewBag.Paging.Total)
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                @ViewBag.Paging.Render("#div-Orders", string.Format("&ViewName={0}&Status={1}", Model.SearchParam.ViewName, Model.SearchParam.Status))
+            </div>
+        }
+    </div>
+</div>

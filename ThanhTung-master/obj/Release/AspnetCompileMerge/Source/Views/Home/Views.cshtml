@@ -1,0 +1,107 @@
+﻿@{
+    var purchaseOrders = new List<PurchaseOrder>
+{
+        new PurchaseOrder{ID =1,Code="PO_01",Name="Hóa đơn từ BigC"},
+        new PurchaseOrder{ID =2,Code="PO_02",Name="Hóa đơn từ Vinmart"},
+    };
+}
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center">@string.Format("Mã hóa đơn")</th>
+                <th class="center">@string.Format("Tên hóa đơn")</th>
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(purchaseOrders, null))
+            {
+                var stt = 0;
+                foreach (var item in purchaseOrders)
+                {
+                    stt++;
+                    var updateLink = "/home/create";
+                    var deleteLink = "";
+                    <tr>
+
+                        <td class="center">@stt</td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td>
+                            @item.Code
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td class="text-center">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+                                        <li>
+                                            <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@updateLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil btn-primary"></i> <span>@string.Format("Cập nhật")</span></a>
+                                        </li>
+                                        <li>
+                                            <a class="quickDelete" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deleteLink"><i aria-hidden="true" title="@string.Format("Xóa")" cla class="fa fa-trash-o btn-danger"></i> <span>@string.Format("Xóa")</span></a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+        @*<div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có bản ghi nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>*@
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                <div>
+                    <strong class="gray">
+                        @string.Format("Có tổng số {0} yêu cầu xác minh", 1)
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            @*<div class="dataTables_paginate paging_bootstrap">
+                <div class="btn-group dropup">
+                    <a href="#" data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle" aria-expanded="false">10 <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu dropdown-blue dropdown-menu-right">
+                        <li><a href="?page=1&amp;np=10">10</a></li>
+                        <li><a href="?page=1&amp;np=20">20</a></li>
+                        <li><a href="?page=1&amp;np=30">30</a></li>
+                    </ul>
+                </div>
+                <ul class="pagination">
+                    <li class="disabled"><a data-index="1" data-target="#divEmployee" data-size="10" href="#" class="first disabled">«</a></li>
+                    <li class="disabled"><a data-index="1" data-target="#divEmployee" data-size="10" href="#" class="prev disabled"><i class="fa fa-angle-left"></i></a></li>
+                    <li class="active"><a data-index="1" data-target="#divEmployee" data-size="10" href="?page=1" class="prev quickView disabled  current">1</a></li>
+                    <li class=""><a data-index="2" data-target="#divEmployee" data-size="10" href="?page=2" class="prev quickView disabled ">2</a></li>
+                    <li class=""><a data-index="3" data-target="#divEmployee" data-size="10" href="?page=3" class="prev quickView disabled ">3</a></li>
+                    <li class=""><a data-index="2" data-target="#divEmployee" data-size="10" href="?page=2" class="next prev quickView disabled "><i class="fa fa-angle-right"></i></a></li>
+                    <li class=""><a data-index="3" data-target="#divEmployee" data-size="10" href="?page=3" class="last prev quickView disabled ">»</a></li>
+                </ul>
+            </div>*@
+            @*@ViewBag.AccountPaging.Render("#div-views")*@
+        </div>
+    </div>
+</div>

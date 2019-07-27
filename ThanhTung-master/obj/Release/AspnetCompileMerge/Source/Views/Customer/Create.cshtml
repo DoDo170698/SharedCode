@@ -1,0 +1,47 @@
+﻿@model CustomerModel
+@{ 
+    Layout = null;
+}
+<form id="FrmCrPO" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+      title="@ViewBag.Title" action="@Model.Url" class="form-horizontal bv-form validateForm quickSubmit useScrollBar" method="post" novalidate="novalidate">
+    <div class="container-fluid">
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Tên khách hàng")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Name", Model.Customer.Name, "Tên khách hàng", "Tên khách hàng", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Mã số thuế")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Code", Model.Customer.Code, "Mã số thuế", "Mã số thuế", false))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Email")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Email", Model.Customer.Email, "Email", "Email", false))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("SĐT")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Phone", Model.Customer.Phone, "SĐT", "SĐT", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Địa chỉ")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextArea("","Address",Model.Customer.Address,"Địa chỉ","Địa chỉ",false,null,10))
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <p id="messeage_err" class="red"></p>
+                <input type="hidden" value="@Model.Customer.ID" name="ID" />
+                <button type="submit" class="btn btn-info btn-sm">@string.Format("Xong")</button>
+            </div>
+        </div>
+    </div>
+</form>
+

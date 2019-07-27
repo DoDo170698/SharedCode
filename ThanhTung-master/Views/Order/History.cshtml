@@ -1,0 +1,202 @@
+﻿@model OrderModel
+<div class="page-body">
+    <ul class="timeline">
+        <li class="timeline-node timeline-now">
+            <a class="btn btn-palegreen">NOW</a>
+            <div class="timeline-datetime">
+                <span class="timeline-time">
+                </span>
+            </div>
+        </li>
+        @if (!Equals(Model.Order.PayedConfirmDate, null))
+        {
+            <li class="timeline-inverted">
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.PayedDate, "HH:mm")
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.PayedDate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge success">
+                    <i class="fa fa-money font-120"></i>
+                </div>
+                <div class="timeline-panel bordered-right-3 bordered-success ">
+                    <div class="timeline-header bordered-bottom bordered-success">
+                        <span class="timeline-title success">
+                            @string.Format("Đã xác nhân thanh toán tiền cho hóa đơn")
+                        </span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>
+                            <i class="green fa fa-quote-left"></i>
+                            @string.Format("Đã xác nhận thanh toán hóa đơn")
+                        </p>
+                    </div>
+                </div>
+            </li>
+
+        }
+        @if (!Equals(Model.Order.AccountingDeptDate, null))
+        {
+            <li>
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.AccountingDeptDate, "HH:mm")
+
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.AccountingDeptDate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge sky">
+                    <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <div class="timeline-panel bordered-left-3 bordered-danger">
+                    <div class="timeline-header bordered-bottom bordered-blue danger ">
+                        <span class="timeline-title">
+                            @string.Format("Xác nhận gửi đến phòng kế toán")
+                        </span>
+                        <p class="timeline-datetime">
+                            <small class="text-muted">
+                                <i class="glyphicon glyphicon-time">
+                                </i>
+                                <span class="timeline-date">Yesterday</span>
+                                -
+                                <span class="timeline-time">8:19</span>
+                            </small>
+                        </p>
+                    </div>
+                    <div class="timeline-body">
+                        <p>
+                            <i class="danger fa fa-quote-left"></i>
+                            @string.Format("Đã xác nhận gửi đến phòng kế toán")
+                        </p>
+                    </div>
+                </div>
+            </li>
+
+        }
+        @if (!Equals(Model.Order.CollectedDate, null))
+        {
+            <li class="timeline-inverted">
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.CollectedDate, "HH:mm")
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.CollectedDate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge sky">
+                    <i class="fa fa-google-wallet font-120"></i>
+                </div>
+                <div class="timeline-panel bordered-right-3 bordered-blue">
+                    <div class="timeline-header  ">
+                        <span class="timeline-title azure">
+                            @string.Format("Xác nhận thu thập chứng từ")
+                        </span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>
+                            <i class="azure fa fa-quote-left"></i>
+                            @string.Format("Đã xác nhận thu thập chứng từ")
+                        </p>
+                    </div>
+                </div>
+            </li>
+
+        }
+        @if (!Equals(Model.Order.IRVReturnDate, null))
+        {
+            <li>
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.IRVReturnDate, "HH:mm")
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.IRVReturnDate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge green">
+                    <i class="fa fa-home font-120"></i>
+                </div>
+                <div class="timeline-panel bordered-left-3 bordered-green">
+                    <div class="timeline-header ">
+                        <span class="timeline-title green">
+                            @string.Format("Xác nhận trả hàng từ kho")
+                        </span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>
+                            <i class="green fa fa-quote-left"></i>
+                            @string.Format("Đã xác nhận trả hàng từ kho")
+                        </p>
+                    </div>
+                </div>
+            </li>
+        }
+        @if (!Equals(Model.Order.RealDeliveryDate, null))
+        {
+            <li class="timeline-inverted">
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.RealDeliveryDate, "HH:mm")
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.RealDeliveryDate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge">
+                    <i class="fa fa-shopping-cart warning"></i>
+                </div>
+
+                <div class="timeline-panel bordered-right-3 bordered-warning">
+                    <div class="timeline-header bordered-bottom bordered-blue">
+                        <span class="timeline-title warning">
+                            @string.Format("Xác nhận giao hàng")
+                        </span>
+                    </div>
+                    <div class="timeline-body">
+                        <div class="tl-wide text-center" style="padding: 5px; margin-top:10px; margin-bottom: 10px;">
+                            <i class="orange fa fa-quote-left"></i>
+                            @string.Format("Đã xác nhận giao hàng")
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+        @if (!Equals(Model.Order.PODate, null))
+        {
+            <li>
+                <div class="timeline-datetime">
+                    <span class="timeline-time">
+                        @Utils.DateToString(Model.Order.PODate, "HH:mm")
+                    </span><span class="timeline-date">
+                        @Utils.DateToString(Model.Order.PODate, "dd-MM-yyyy")
+                    </span>
+                </div>
+                <div class="timeline-badge default">
+                    <i class="fa fa-file-text font-120"></i>
+                </div>
+                <div class="timeline-panel bordered-left-3 bordered-default">
+                    <div class="timeline-header ">
+                        <span class="timeline-title default">
+                            @string.Format("Xác nhận ngày đặt đơn hàng")
+                        </span>
+                    </div>
+                    <div class="timeline-body">
+                        <p>
+                            <i class="default fa fa-quote-left"></i>
+                            @string.Format("Ngày đặt đơn hàng")
+                        </p>
+                    </div>
+                </div>
+            </li>
+        }
+        <li class="timeline-node timeline-create">
+            <a class="btn btn-info"><i class="fa fa-plus"></i>@string.Format("Ngày tạo đơn")</a>
+            <div class="timeline-datetime">
+                <span class="timeline-time">
+                    @Utils.DateToString(Model.Order.Created, "HH:mm")
+                </span><span class="timeline-date"> @Utils.DateToString(Model.Order.Created, "dd-MM-yyyy")</span>
+            </div>
+        </li>
+    </ul>
+</div>

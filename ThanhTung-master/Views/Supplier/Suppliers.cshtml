@@ -1,0 +1,107 @@
+﻿@model SupplierModel
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center wpx180">@string.Format("Tên khách hàng")</th>
+                <th class="center wpx120">@string.Format("Mã số thuế")</th>
+                <th class="center">@string.Format("Liên hệ")</th>
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(Model.Suppliers, null))
+            {
+                var stt = ViewBag.Paging.PageStart;
+                foreach (var item in Model.Suppliers)
+                {
+                    stt++;
+                    var updateLink = "/supplier/update";
+                    var deleteLink = "/supplier/IsDelete";
+                    <tr>
+
+                        <td class="center">@stt</td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Code
+                        </td>
+                        <td>
+                            <div class="project_items">
+                                <div class="user-info">
+                                    <span class="ui fix-table">
+                                        <span class="clearfix">
+                                            Email: @item.Email
+                                        </span>
+                                        <span class="clearfix">
+                                            SĐT: @item.Phone
+                                        </span>
+                                        <span class="clearfix">
+                                            Địa chỉ: @item.Address
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+                                        <li>
+                                            <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@updateLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil btn-primary"></i> <span>@string.Format("Cập nhật")</span></a>
+                                        </li>
+                                        <li>
+                                            <a class="quickDelete" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deleteLink"><i aria-hidden="true" title="@string.Format("Xóa")" cla class="fa fa-trash-o btn-danger"></i> <span>@string.Format("Xóa")</span></a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+
+        @if (Model.Suppliers.Count <= 0)
+        {
+            <div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có nhà cung cấp nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                    <div>
+                        <strong class="gray">
+                            @string.Format("Có tổng số {0} nhà cung cấp",ViewBag.Paging.Total)
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                @ViewBag.Paging.Render("#div-suppliers")
+            </div>
+        }
+    </div>
+</div>

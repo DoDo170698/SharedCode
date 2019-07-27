@@ -1,0 +1,100 @@
+﻿@model ProductModel
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th value="@(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))" class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center wpx180">@string.Format("Tên hàng hóa")</th>
+                <th class="center wpx180">@string.Format("Mã hàng hóa")</th>
+                <th class="center wpx180">@string.Format("Loại hàng hóa")</th>
+                <th class="center wpx120">@string.Format("Mã vạch(BarCode)")</th>
+                <th class="center">@string.Format("Đơn giá (VNĐ)")</th>
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(Model.Products, null))
+            {
+                var stt = ViewBag.Paging.PageStart;
+                foreach (var item in Model.Products)
+                {
+                    stt++;
+                    var productType = Model.ProductTypes.FirstOrDefault(t => t.ID == item.Type) ?? new Category();
+                    var updateLink = "/Product/update";
+                    var deleteLink = "/Product/IsDelete";
+                    <tr>
+
+                        <td class="center">@stt</td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Code
+                        </td>
+                        <td>@productType.Name</td>
+                        <td>
+                            @item.BarCode
+                        </td>
+                        <td>
+                            @(item.Price > 0 ? string.Format("{0:0,0}", item.Price) : "0")
+                        </td>
+                        <td class="text-center">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+                                        <li>
+                                            <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@updateLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil btn-primary"></i> <span>@string.Format("Cập nhật")</span></a>
+                                        </li>
+                                        <li>
+                                            <a class="quickDelete" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deleteLink"><i aria-hidden="true" title="@string.Format("Xóa")" cla class="fa fa-trash-o btn-danger"></i> <span>@string.Format("Xóa")</span></a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+
+        @if (Model.Products.Count <= 0)
+        {
+            <div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có sản phẩm nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                    <div>
+                        <strong class="gray">
+                            @string.Format("Có tổng số {0} hàng hóa", ViewBag.Paging.Total)
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                @ViewBag.Paging.Render("#div-Products")
+            </div>
+        }
+    </div>
+</div>

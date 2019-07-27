@@ -1,0 +1,205 @@
+﻿
+<div class="sidebar-header-wrapper hidden">
+    <input type="text" class="searchinput" placeholder="@string.Format("Tìm kiếm")" />
+    <i class="glyphicon orange glyphicon-search"></i>
+    <div class="searchhelper">@string.Format("Tìm kiếm")</div>
+</div>
+<ul class="nav sidebar-menu newfeed useCollaspe">
+
+    <li class="">
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white fa fa-cog"></i>
+            <span class="menu-text">@string.Format("Quản trị hệ thống")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="#" class="menu-dropdown hidden">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Tài khoản")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown hidden">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Vai trò")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-dropdown hidden">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Module")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/CategoryType" class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Định nghĩa danh mục")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="">
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white ionicons ion-social-buffer"></i>
+            <span class="menu-text">@string.Format("Quản lý danh mục")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="/supplier" class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Nhà cung cấp")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/customer" class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Khách hàng")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/Product" class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Hàng hóa")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white ionicons ion-social-buffer"></i>
+            <span class="menu-text">@string.Format("Bán hàng theo đơn hàng")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href=@string.Format("/Order?ViewName={0}","Receive") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Đơn đặt hàng")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/Order?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.Delivery),"Delivery") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Giao hàng")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/Order?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.IRVReturn),"IRVReturn") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Trả phiếu nhập kho")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/Order?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.CollectVouchers),"CollectVouchers") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Thu thập chứng từ")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+
+                @{
+                    var payedStatus = string.Format("{0},{1}", (int)(Enums.OrderStatus.Payed), (int)(Enums.OrderStatus.PayedConfirm));
+                }
+                <a href=@string.Format("/Order?ListStatus={0}&ViewName={1}",payedStatus,"Payed") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Đã thanh toán hóa đơn")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="open">
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white ionicons ion-social-buffer"></i>
+            <span class="menu-text">@string.Format("Bán hàng theo số lượng")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href=@string.Format("/AmountOrder?ViewName={0}","Receive") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Đơn đặt hàng")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/AmountOrder?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.Delivery),"Delivery") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Giao hàng")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/AmountOrder?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.IRVReturn),"IRVReturn") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Trả phiếu nhập kho")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+                <a href=@string.Format("/AmountOrder?ListStatus={0}&ViewName={1}",(int)(Enums.OrderStatus.CollectVouchers),"CollectVouchers") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Thu thập chứng từ")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+            <li>
+
+                @{
+                    var payedAmountStatus = string.Format("{0},{1}", (int)(Enums.OrderStatus.Payed), (int)(Enums.OrderStatus.PayedConfirm));
+                }
+                <a href=@string.Format("/AmountOrder?ListStatus={0}&ViewName={1}",payedAmountStatus,"Payed") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Đã thanh toán hóa đơn")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="open">
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white ionicons ion-social-buffer"></i>
+            <span class="menu-text">@string.Format("Phòng kế toán")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href=@string.Format("/AccountingDept") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Phòng kế toán")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="open">
+        <a class="menu-dropdown" href="#">
+            <i class="menu-icon white ionicons ion-social-buffer"></i>
+            <span class="menu-text">@string.Format("Chiết khấu")</span>
+            <i class="menu-expand"></i>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href=@string.Format("/OrderDiscount") class="menu-dropdown">
+                    <i class="menu-icon glyphicon orange glyphicon-list-alt"></i>
+                    <span class="menu-text">@string.Format("Chiết khấu")</span>
+                    <i class="menu-expand"></i>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

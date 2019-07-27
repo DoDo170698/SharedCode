@@ -1,0 +1,137 @@
+﻿@model AccountingDeptModel
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th value="@(DateTime.Now.ToString("dd-MM-yyyy HH:mm"))" class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center wpx200">@string.Format("Thông tin đơn hàng")</th>
+                <th class="center auto">@string.Format("File thu thập chứng từ")</th>
+                <th class="center wpx150">@string.Format("Trạng thái")</th>
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(Model.AccountingDepts, null))
+            {
+                var stt = ViewBag.Paging.PageStart;
+                var accountingDeptDay = long.Parse(SystemConfig.GetValueByKey("AccountingDeptDay"));
+                foreach (var item in Model.AccountingDepts)
+                {
+                    stt++;
+                    var order = Model.Orders.FirstOrDefault(t => t.ID == item.IDOrder) ?? new Order();
+                    var controller = "Order";
+                    var isOrder = true;
+                    if (item.Type == (int)(Enums.OrderType.Amount))
+                    {
+                        controller = "AmountOrder";
+                        isOrder = false;
+                    }
+                    var detailLink = string.Format("/{0}/Detail?ID={1}&ListStatus={2}&IsAD=1", controller, order.ID, CUtils.GetListStatus(order.Status));
+                    var isADConfirm = item.Status == (int)(Enums.OrderStatus.AccountingDeptConfirm);
+                    var isReceive = item.Status == (int)(Enums.AccountingDeptStatus.Receive);
+                    var adConfirmLink = string.Format("/AccountingDept/IsConfirm");
+                    var adRejectLink = string.Format("/AccountingDept/IsReject");
+                    var orderFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Order)) ?? new OrderFile();
+                    var declarationFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Declaration)) ?? new OrderFile();
+                    var billFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Bill)) ?? new OrderFile();
+                    var overDay = !Equals(item.Created, null) ? CUtils.GetOverDay(DateTime.Now, item.Created.Value.AddDays(accountingDeptDay)) : 0;
+                    var isOverDay = overDay > 0 && item.Status == (int)(Enums.AccountingDeptStatus.Receive) ? true : false;
+                    <tr>
+                        <td class="center">@stt</td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td class="@(isOverDay? "over-day" :string.Empty)">
+                            <label>
+                                <span class="">@string.Format("Mã: ")</span>
+                                <a href="@detailLink"> @order.PONo</a>
+                            </label>
+                            <p><span>@string.Format("Loại: ")@CUtils.RenderOrderType(item.Type, "null")</span></p>
+                            @if (isOverDay)
+                            {
+                                <p>
+                                    <span>@string.Format("Quá hạn {0} ngày", overDay)</span>
+                                </p>
+                            }
+
+                        </td>
+                        <td>
+                            <ul class="list-style-downfile">
+                                @if (isOrder)
+                                {
+                                    <li>
+                                        <label>Đơn hàng </label>:
+                                        <a target="_blank" class="" href="@Utils.UrlFile(orderFile.Path,orderFile.FileName)">@orderFile.FileName</a>
+                                    </li>
+                                }
+                                <li>
+                                    <label>Bảng kê </label>:
+                                    <a target="_blank" class="" href="@Utils.UrlFile(declarationFile.Path,declarationFile.FileName)">@declarationFile.FileName</a>
+                                </li>
+                                <li>
+                                    <label>Hóa đơn </label>:
+                                    <a target="_blank" href="@Utils.UrlFile(billFile.Path,billFile.FileName)">@billFile.FileName</a>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>@CUtils.RenderACDStatus(item.Status)</td>
+                        <td class="text-center">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+
+                                        @if (isReceive)
+                                        {
+                                            <li>
+                                                <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@adRejectLink"><i aria-hidden="true" title="@string.Format("Trả về thu thập chứng từ")" class="fa fa-arrow-left btn-azure"></i> <span>@string.Format("Trả về thu thập chứng từ")</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="quickDelete" data-id="@item.ID" data-target=".ui-dialog:visible" href="@adConfirmLink"><i aria-hidden="true" title="@string.Format("Xác nhận thu thập chứng từ")" class="fa fa-check btn-blueviolet"></i> <span>@string.Format("Xác nhận thu thập chứng từ")</span></a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+
+        @if (Model.AccountingDepts.Count <= 0)
+        {
+            <div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có sản phẩm nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                    <div>
+                        <strong class="gray">
+                            @string.Format("Có tổng số {0} hàng hóa", ViewBag.Paging.Total)
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                @ViewBag.Paging.Render("#div-AccountingDepts")
+            </div>
+        }
+    </div>
+</div>

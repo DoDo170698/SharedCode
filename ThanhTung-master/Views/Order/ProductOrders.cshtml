@@ -1,0 +1,105 @@
+﻿@model OrderModel
+@if (!Equals(Model.ProductOrders, null))
+{
+    var stt = ViewBag.Paging.PageStart;
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th class="wpx50 center">STT</th>
+                <th class="center auto">@string.Format("Tên hàng hóa")</th>
+                <th class="center wpx100">@string.Format("Mã vạch") </th>
+                <th class="center wpx100">@string.Format("Đơn vị tính") </th>
+                <th class="center wpx110">@string.Format("Đơn giá (VNĐ)") </th>
+                <th class="center wpx180">@string.Format("Số lượng") </th>
+                <th class="center wpx170">@string.Format("Khuyến mại (VNĐ)") </th>
+                <th class="center wpx160">@string.Format("Thành tiền (VNĐ)") </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductOrders)
+            {
+                var product = Model.Products.FirstOrDefault(t => t.ID == item.IDProduct) ?? new Product();
+                var calUnit = Model.CalUnits.FirstOrDefault(t => t.ID == product.CalUnit) ?? new Category();
+            <tr>
+                <td data-id="@item.ID" class="center">@stt</td>
+                <td>
+                    @product.Name
+                </td>
+                <td>
+                    @product.BarCode
+                </td>
+                <td>
+                    @calUnit.Name
+                </td>
+                <td>
+                    @(product.Price > 0 ? string.Format("{0:0,0}", product.Price) : "0")
+                </td>
+                <td>
+                    <ul class="ul_order_info">
+                        <li>
+                            Số lượng đơn hàng :
+                            <span class="font-weight-bold">@(item.Amount > 0 ? string.Format("{0:0,0}",item.Amount) :"0")</span>
+                        </li>
+                        <li>
+                            Số lượng giao hàng :
+                            <span class="font-weight-bold">@(item.RealAmount > 0 ? string.Format("{0:0,0}", item.RealAmount) :"0")</span>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <ul class="ul_order_info">
+                        <li>
+                            Khuyến mại đơn hàng : <br />
+                            <p class="font-weight-bold">@(item.Promotion > 0 ? string.Format("{0:0,0}", item.Promotion) : "0")</p>
+                        </li>
+                        <li>
+                            Khuyến mại thực tế : <br />
+                            <p class="font-weight-bold">@(item.RealPromotion > 0 ? string.Format("{0:0,0}", item.RealPromotion) : "0")</p>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <ul class="ul_order_info">
+                        <li>
+                            Tổng tiền đơn hàng : <br />
+                            <p class="font-weight-bold">@(item.Total > 0 ? string.Format("{0:0,0}", item.Total) : "0")</p>
+                        </li>
+                        <li>
+                            Tổng tiền thực tế : <br />
+                            <p class="font-weight-bold">@(item.RealTotal > 0 ? string.Format("{0:0,0}", item.RealTotal) : "0")</p>
+                        </li>
+                    </ul>
+                </td>
+
+            </tr>
+                stt++;
+            }
+        </tbody>
+    </table>
+
+}
+<div class="row DTTTFooter">
+    @if (!Equals(Model.ProductOrders, null) && Model.ProductOrders.Count <= 0)
+    {
+        <div class="dataTables_info col-sm-12 text-center padt10">
+            <strong class="gray">
+                @string.Format("Không có sản phẩm nào phù hợp, vui lòng thử lại")
+            </strong>
+        </div>
+    }
+    else if (!Equals(Model.ProductOrders, null) && Model.ProductOrders.Count > 0)
+    {
+        <div class="col-md-4">
+            <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                <div>
+                    <strong class="gray">
+                        @string.Format("Có tổng số {0} sản phẩm của đơn hàng", Model.ProductOrders.Count)
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8"></div>
+
+    }
+</div>
+

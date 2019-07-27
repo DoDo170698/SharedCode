@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="2" virtualPath="/Views/Shared/Header.cshtml" hash="278a79f9" filehash="2b54f1067c7a" flags="110000" assembly="App_Web_abt04vw2" type="ASP._Page_Views_Shared_Header_cshtml">
+    <filedeps>
+        <filedep name="/Views/Shared/Header.cshtml" />
+    </filedeps>
+</preserve>

@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+    var CUser = Equals(ViewBag.CUser, null) ? new Account() : (Account)(ViewBag.CUser);
+}
+<!DOCTYPE html>
+<!--
+BeyondAdmin - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.4
+Version: 1.4
+Purchase: http://wrapbootstrap.com
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+
+<head>
+    <meta charset="utf-8" />
+    <title>Widgets</title>
+
+    <meta name="description" content="widgets" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+
+    <!--Basic Styles-->
+    <link href="~/Assets/beyond/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Assets/beyond/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Assets/beyond/css/weather-icons.min.css" rel="stylesheet" />
+    <!--Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="assets/css/beyond.min.css" rel="stylesheet" />
+    <link href="~/Assets/beyond/css/animate.min.css" rel="stylesheet" />
+    <link id="skin-link" href="" rel="stylesheet" type="text/css" />
+    <link href="~/Assets/app/css/style.css" rel="stylesheet" />
+    <link href="~/Assets/app/css/style-main.css" rel="stylesheet" />
+    <script src="~/Assets/beyond/js/skins.min.js"></script>
+</head>
+<!-- /Head -->
+<!-- Body -->
+
+<body>
+    <section id="login">
+        <div class="lg-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 m-auto login">
+                        <div class="avatar">
+                            <img src="~/Assets/app/img/login/icon.png" class="img-ava" alt="" />
+                        </div>
+                        <form action="/home/login" class="login-frm" method="post">
+                            <div class="form-group">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <input type="text" name="UserName" class="form-control" placeholder="Tên đăng nhập">
+                            </div>
+                            <div class="form-group">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                <input type="password" name="PassWord" class="form-control" placeholder="Mật khẩu">
+                            </div>
+
+                            <div class="notice">
+                                <p>@ViewBag.LoginMessage</p>
+                            </div>
+                            <div class="container-login-form-btn d-none">
+                                <div class="wrap-login-form-btn">
+                                    <div class="login-form-bgbtn"></div>
+                                    <button class="login-form-btn" id="btn_login" type="submit">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!--Basic Scripts-->
+
+    <script src="~/Assets/beyond/js/jquery.min.js"></script>
+    <script src="~/Assets/beyond/js/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="~/Assets/beyond/js/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/Assets/beyond/js/beyond.js"></script>
+    <script src="~/Assets/app/js/Login.js"></script>
+    <!--Page Related Scripts-->
+</body>
+<!--  /Body -->
+
+</html>

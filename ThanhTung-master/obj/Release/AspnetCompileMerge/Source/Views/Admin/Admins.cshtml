@@ -1,0 +1,87 @@
+﻿@model AdminModel
+<div>
+    <table class="table table-bordered table-hover table-striped dataTable">
+        <thead>
+            <tr>
+                <th class="wpx50 center">@string.Format("STT")</th>
+                <th class="wpx50 center">
+                    <label>
+                        <input class="group-checkable" type="checkbox">
+                        <span class="text"></span>
+                    </label>
+                </th>
+                <th class="center">@string.Format("Thông tin tài khoản")</th>
+                <th class="center">@string.Format("Vai trò")</th>
+                <th class="center wpx120">@string.Format("Thao tác")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Equals(Model.Accounts, null))
+            {
+                var stt = 0;
+                foreach (var item in Model.Accounts)
+                {
+                    stt++;
+                    var updateLink = "/home/create";
+                    var deleteLink = "";
+                    <tr>
+
+                        <td class="center">@stt</td>
+                        <td class="center">
+                            <label>
+                                <input data-id="@item.ID" class="checkboxes" type="checkbox">
+                                <span class="text"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <img class="ua" width="30" alt="@item.UserName" title="@item.UserName" src="~/Assets/app/img/avatar.png">
+                                <span class="ui">
+                                    <a href="#"><span class="clearfix">@item.UserName</span></a>
+                                    <small class="clearfix"><i class="fa fa-fw fa-envelope-o"></i> @item.Email</small>
+                                    <small class="clearfix"><i class="fa fa-fw fa-phone"></i> @item.Phone</small>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td class="text-center">
+                            <div class="btns">
+                                <div class="btn-group">
+                                    <ul class="important_action_btn">
+                                        <li>
+                                            <a class="quickUpdate" data-target=".ui-dialog:visible" data-id="@item.ID" href="@updateLink"><i aria-hidden="true" title="@string.Format("Cập nhật")" class="fa fa-pencil btn-primary"></i> <span>@string.Format("Cập nhật")</span></a>
+                                        </li>
+                                        <li>
+                                            <a class="quickDelete" data-target=".ui-dialog:visible" data-id="@item.ID" href="@deleteLink"><i aria-hidden="true" title="@string.Format("Xóa")" cla class="fa fa-trash-o btn-danger"></i> <span>@string.Format("Xóa")</span></a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row DTTTFooter">
+        @*<div class="dataTables_info col-sm-12 text-center padt10">
+                <strong class="gray">
+                    @string.Format("Không có bản ghi nào phù hợp, vui lòng thử lại")
+                </strong>
+            </div>*@
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="dataTables_info text-center" id="searchable_info" role="status" aria-live="polite">
+                <div>
+                    <strong class="gray">
+                        @string.Format("Có tổng số {0} yêu cầu xác minh", 1)
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>

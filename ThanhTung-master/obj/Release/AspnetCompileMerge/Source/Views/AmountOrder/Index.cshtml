@@ -1,0 +1,98 @@
+﻿@model OrderModel
+<div class="page-breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="#">@string.Format("Tổng quan")</a>
+        </li>
+        <li class="active">@string.Format("Đơn hàng")</li>
+    </ul>
+</div>
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <span class="widget-caption"><i class="menu-icon fa fa fa-list-alt"></i>@ViewBag.Title</span>
+                    <div class="widget-buttons">
+                        <a class="widget_back_btn text-btn" href="#" title="Quay lại"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> <span>Quay lại</span></a>
+                        <a data-toggle="maximize" href="#"><i class="fa fa-expand"></i></a>
+                        <a data-toggle="collapse" href="#"><i class="fa fa-minus"></i></a>
+                        <a data-toggle="dispose" href="#"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="widget-body no-padding">
+                    <div class="dataTables_wrapper form-inline">
+                        <div class="dataTables_filter">
+                            <form class="quickSearch dataFilter" data-target="#div-Orders" action="/AmountOrder" method="post" enctype="multipart/form-data">
+                                <div class="col-md-3">
+                                    <label>
+                                        <input type="text" name="Term" class="form-control" value="@Model.SearchParam.Term" placeholder="Tìm kiếm theo PO đơn hàng" />
+                                        <input type="hidden" name="ViewName" value="@Model.SearchParam.ViewName" />
+                                    </label>
+                                </div>
+                                @if (Equals(Model.SearchParam.ViewName, "Receive"))
+                                {
+                                    <div class="col-md-3">
+                                        <label>
+                                            @Html.CusDropDownListByStatus("", "Status", "Trạng thái", "Tất cả", (int)(Enums.MvcStringRender.OrderStatus), Model.ListStatus.Select(t => new SelectListItem() { Text = t.Value, Value = t.Key.ToString(), Selected = Model.SearchParam.Status == t.Key }))
+                                        </label>
+                                    </div>
+                                }
+
+                                <div class="col-md-2 dataFilter_Dropdown_Section">
+                                    <div class="dropdown dataFilter_Dropdown">
+                                        @if (Equals(Model.SearchParam.ViewName, "Receive"))
+                                        {
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="dataFilter_Dropdown">
+                                                <i class="fa fa-sliders" aria-hidden="true"></i>@string.Format("Nâng cao")
+                                            </button>
+                                        }
+
+                                    </div>
+                                    <button class="btn btn-info" type="submit"><i class="glyphicon glyphicon-search"></i><span class="hidden-search">@string.Format("Tìm kiếm")</span> </button>
+                                    <a title="@string.Format("Hủy tìm kiếm")" class="btn btn-info " href="@String.Format("/AmountOrder?ViewName={0}&Status={1}", Model.SearchParam.ViewName, Model.SearchParam.Status)"><i class="fa fa-times" aria-hidden="true"></i><span class="hidden-search">@string.Format("Hủy")</span></a>
+                                </div>
+                                <div class="dropdown-menu dataFilter_Dropdown_target">
+                                    <div class="dropdown-menu-content">
+                                        <a href="#" title="Đóng" class="dataFilter_Dropdown_close"><i class="ion-android-close"></i></a>
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <div class="col-md-3 ">
+                                                    <label>
+                                                        @Html.CusTextBoxDateTime("", "StartDate", Utils.DateToString(Model.SearchParam.StartDate, "dd-MM-yyyy HH:mm"), "Từ ngày đặt hàng", "Từ ngày đặt hàng", false, new { autocomplete = "off" })
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-3 ">
+                                                    <label>
+                                                        @Html.CusTextBoxDateTime("", "EndDate", Utils.DateToString(Model.SearchParam.StartDate, "dd-MM-yyyy HH:mm"), "Đến ngày giao hàng", "Đến ngày giao hàng", false, new { autocomplete = "off" })
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-3 ">
+                                                    <label>
+                                                        @Html.CusTextBoxDate("", "IRVReturnDate", Utils.DateToString(Model.SearchParam.IRVReturnDateDate, "dd-MM-yyyy"), "Ngày nhập kho", "Ngày nhập kho", false, new { autocomplete = "off" })
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-3 ">
+                                                    <label>
+                                                        @Html.CusTextBoxDate("", "PayedDate", Utils.DateToString(Model.SearchParam.PayedDate, "dd-MM-yyyy"), "Ngày thanh toán hóa đơn", "Ngày thanh toán hóa đơn", false, new { autocomplete = "off" })
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="divContainer">
+                            <div id="div-Orders" class="divContainer">
+                                @Html.Partial("Orders", Model)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

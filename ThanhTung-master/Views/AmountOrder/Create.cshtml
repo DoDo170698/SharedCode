@@ -1,0 +1,304 @@
+﻿@model OrderModel
+@{
+    Layout = null;
+    var idProducts = new int[] { 0 };
+    if (Model.Order.ID > 0 && !Equals(Model.Products, null))
+    {
+        idProducts = Model.ProductOrders.Select(t => t.IDProduct).ToArray();
+    }
+    var idProductJsons = idProducts.ToJsonString();
+    var stringTotal = "Tổng tiền đơn hàng";
+    var orderValue = Model.Order.Value;
+    if (Model.Status == (int)(Enums.OrderStatus.Receive))
+    {
+        stringTotal = "Tổng tiền đơn hàng";
+        orderValue = Model.Order.Value;
+    }
+    else if (Model.Status == (int)(Enums.OrderStatus.Delivery))
+    {
+        stringTotal = "Tổng tiền đơn hàng thực tế";
+        orderValue = Model.Order.RealValue;
+    }
+    var x =(Model.Action == (int)(Enums.ActionStatus.Update))
+                     ||(Model.Action == (int)(Enums.ActionStatus.View) && Equals(Model.Order.RealDeliveryDate,null));
+    var isShowOrigin = (Model.Action == (int)(Enums.ActionStatus.Update))
+                     ||(Model.Action == (int)(Enums.ActionStatus.View) && Equals(Model.Order.RealDeliveryDate,null))
+                     ? true : false;
+}
+<form id="FrmCrPO" data-check="@x" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+      title="@ViewBag.Title" action="@Model.Url" class="form-horizontal bv-form validateForm quickSubmit useScrollBar" method="post" novalidate="novalidate">
+    <div class="container-fluid">
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Số đơn hàng")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "PONo", Model.Order.PONo, "Số đơn hàng", "Số đơn hàng", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Khách hàng")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                <input class="form-control autocompleteCustomer"
+                       name="TypeFake" placeholder="Khách hàng" title="Đơn vị tính" type="text" value="@Model.Customer.Name"
+                       data-type="2" data-parent="0" data-targetid="@("#IDCustomer"+Model.Order.ID)">
+                <input type="hidden" id="@("IDCustomer"+Model.Order.ID)" name="IDCustomer" value="@Model.Order.IDCustomer" />
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Nhà cung cấp")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                <input class="form-control autocompleteSupplier"
+                       name="TypeFake" placeholder="Nhà cung cấp" title="Nhà cung cấp" type="text" value="@Model.Supplier.Name"
+                       data-type="2" data-parent="0" data-targetid="@("#IDSupplier"+Model.Order.ID)">
+                <input type="hidden" id="@("IDSupplier"+Model.Order.ID)" name="IDSupplier" value="@Model.Order.IDSupplier" />
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Ngày đặt hàng")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBoxDateTime("", "PODate", Utils.DateToString(Model.Order.PODate, "dd-MM-yyyy HH:mm"), "Ngày đặt hàng", "Ngày đặt hàng", true, new { autocomplete = "off" }))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Người đặt hàng")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Purchaser", Model.Order.Purchaser, "Người đặt hàng", "Người đặt hàng", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Email")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Email", Model.Order.Email, "Email", "Email", false))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("SĐT")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Tel", Model.Order.Tel, "SĐT", "SĐT", true, new { autocomplete = "on" }))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Ngày giao hàng")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBoxDateTime("", "DeliveryDate", Utils.DateToString(Model.Order.DeliveryDate, "dd-MM-yyyy HH:mm"), "Ngày giao hàng", "Ngày giao hàng", true, new { autocomplete = "off" }))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Địa chỉ giao hàng")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Address", Model.Order.Address, "Địa chỉ giao hàng", "Địa chỉ giao hàng", true, new { autocomplete = "on" }))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Ghi chú")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextArea("", "Note", Model.Order.Note, "Ghi chú", "Ghi chú", false, 5, 5))
+            </div>
+        </div>
+        @if (Model.Status == (int)(Enums.OrderStatus.Receive))
+        {
+            <div class="form-group">
+                <label class="col-lg-4 control-label-left">@string.Format("Chọn hàng hóa")<span class="red">*</span></label>
+                <div class="col-lg-8">
+                    <select class="form-control selectpicker selected_change"
+                            data-url="/order/GetProduct"
+                            data-temp="#productTemplate"
+                            data-target="#productContainer"
+                            data-live-search="true">
+                        <option>Chưa xác định</option>
+                        @if (!Equals(Model.Products, null))
+                        {
+                            foreach (var item in Model.Products)
+                            {
+                                <option value="@item.ID">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+        }
+
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="row">
+                    <table class="table table-bordered table-hover table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th class="center wpx150">@string.Format("Tên hàng hóa")</th>
+                                <th class="center auto">@string.Format("Mã vạch")</th>
+                                <th class="center auto">@string.Format("Đơn vị tính")</th>
+                                <th class="center auto">@string.Format("Đơn giá")</th>
+                                <th class="center wpx100">@string.Format("Số lượng")</th>
+                                <th class="center wpx120">@string.Format("Khuyến mại")</th>
+                                <th class="center wpx120">@string.Format("Thành tiền")</th>
+                                <th class="center wpx10">@string.Format("Xóa")</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productContainer" data-value="@idProductJsons">
+                            @if (!Equals(Model.ProductOrders, null))
+                            {
+                                foreach (var item in Model.ProductOrders.ToList())
+                                {
+                                    var product = Model.Products.FirstOrDefault(t => t.ID == item.IDProduct) ?? new Product();
+                                    var calUnit = Model.CalUnits.FirstOrDefault(t => t.ID == product.CalUnit) ?? new Category();
+                            <tr id='' class="item item-inputers">
+                                <td title="@product.Name">
+                                    <div class="form-group has-feedback">
+                                        <input type="hidden" name="ProductID" value="@product.ID" />
+                                        <input name="ProductName" type="text" data-originname="ProductName" value="@product.Name"
+                                               placeholder="@string.Format("Tên hàng hóa")"
+                                               class="form-control Isnumber pt-5">
+                                    </div>
+                                </td>
+                                <td title="@product.BarCode">
+                                    <div class="form-group has-feedback">
+                                        <input name="ProductBarCode" type="text" data-originname="ProductBarCode" value="@product.BarCode"
+                                               placeholder="@string.Format("Mã vạch")"
+                                               class="form-control Isnumber pt-5">
+                                    </div>
+                                </td>
+                                <td title="@calUnit.Name">
+                                    <div class="form-group has-feedback">
+                                        <input name="ProductCalUnitName" type="text" data-originname="ProductCalUnitName" value="@calUnit.Name"
+                                               placeholder="@string.Format("Đơn vị tính")"
+                                               class="form-control Isnumber pt-5">
+                                    </div>
+                                </td>
+                                <td title="@(product.Price >0 ?string.Format("{0:0,0}",product.Price):"0")">
+                                    <div class="form-group has-feedback">
+                                        <input name="ProductPrice" type="text" data-originname="ProductPrice" value="@(product.Price >0 ?string.Format("{0:0,0}",product.Price):"0")"
+                                               placeholder="@string.Format("Đơn giá")"
+                                               class="form-control Isnumber pt-5 moneyFormat">
+                                    </div>
+                                </td>
+                                <td data-x="@isShowOrigin" title="@(isShowOrigin ? (item.Amount>0?string.Format("{0:0,0}",item.Amount):"0") : (item.RealAmount> 0 ?string.Format("{0:0,0}",item.RealAmount) :"0"))">
+                                    <div class="form-group has-feedback">
+                                        <input name="ProductAmount" type="text"data-originname="Amount" value="@(isShowOrigin ? (item.Amount>0?string.Format("{0:0,0}",item.Amount):"0") : (item.RealAmount> 0 ?string.Format("{0:0,0}",item.RealAmount) :"0"))"
+                                               placeholder="@string.Format("Số lượng")"
+                                               class="form-control Isnumber pt-5 calTotal moneyFormat">
+                                    </div>
+                                </td>
+                                <td title="@(isShowOrigin ? (item.Promotion>0?string.Format("{0:0,0}",item.Promotion):"0") : (item.RealPromotion> 0 ?string.Format("{0:0,0}",item.RealPromotion) :"0"))">
+                                    <div class="form-group has-feedback">
+                                        <input name="ProductPromotion" type="text" data-total="" data-originname="Promotion" value="@(isShowOrigin ? (item.Promotion>0?string.Format("{0:0,0}",item.Promotion):"0") : (item.RealPromotion> 0 ?string.Format("{0:0,0}",item.RealPromotion) :"0"))"
+                                               placeholder="@string.Format("Khuyến mại")"
+                                               class="form-control Isnumber pt-5 calTotal moneyFormat">
+                                    </div>
+                                </td>
+                                <td title="@(isShowOrigin ? (item.Total>0?string.Format("{0:0,0}",item.Total):"0") : (item.RealTotal> 0 ?string.Format("{0:0,0}",item.RealTotal) :"0"))">
+                                    <div class="form-group has-feedback">
+                                        <input name="Total" type="text" data-originname="Total" value="@(isShowOrigin ? (item.Total>0?string.Format("{0:0,0}",item.Total):"0") : (item.RealTotal> 0 ?string.Format("{0:0,0}",item.RealTotal) :"0"))"
+                                               placeholder="@string.Format("Thành tiên")"
+                                               class="form-control Isnumber pt-5 moneyFormat">
+                                    </div>
+                                </td>
+                                <td>
+                                    <a class="btn btn-link deleteItem check"
+                                       data-val="@product.ID"
+                                       data-target-change="#productContainer"
+                                       title="@string.Format("Hủy")" href="javascript:void(0);">
+                                        <i class="fa fa-remove red"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-group price">
+            <div class="col-md-4">
+                <p class="">
+                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                    @stringTotal
+                </p>
+            </div>
+            <div class="col-md-2 money">
+                <p id="valueOrder">
+                    @(orderValue > 0 ? string.Format("{0:0,0}", orderValue) : "0") VNĐ
+                </p>
+                <input type="hidden" name="ValueOfOrder" value="@orderValue" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <p id="messeage_err" class="red" data-message="Hàng hóa này đã tồn tại"></p>
+                <input type="hidden" value="@Model.Order.Status" name="Status" />
+                <input type="hidden" value="@Model.Order.ID" name="ID" />
+                @if (Model.Order.Status < (int)(Enums.OrderStatus.Delivery))
+                {
+                    <button type="submit" class="btn btn-info btn-sm">@string.Format("Xong")</button>
+                }
+            </div>
+        </div>
+    </div>
+    <script type="text/template" id="productTemplate">
+        <tr id='' class="item item-inputers">
+            <td title="@string.Format("Tên hàng hóa")">
+                <div class="form-group has-feedback">
+                    <input type="hidden" name="ProductID" value="0" />
+                    <input name="ProductName" type="text" data-originname="ProductName"
+                           placeholder="@string.Format("Tên hàng hóa")"
+                           class="form-control Isnumber pt-5">
+                </div>
+            </td>
+            <td title="@string.Format("Mã vạch")">
+                <div class="form-group has-feedback">
+                    <input name="ProductBarCode" type="text" data-originname="ProductBarCode"
+                           placeholder="@string.Format("Mã vạch")"
+                           class="form-control Isnumber pt-5">
+                </div>
+            </td>
+            <td title="@string.Format("Đơn vị tính")">
+                <div class="form-group has-feedback">
+                    <input name="ProductCalUnitName" type="text" data-originname="ProductCalUnitName"
+                           placeholder="@string.Format("Đơn vị tính")"
+                           class="form-control Isnumber pt-5">
+                </div>
+            </td>
+            <td title="@string.Format("Đơn giá")">
+                <div class="form-group has-feedback">
+                    <input name="ProductPrice" value="0" type="text" data-originname="ProductPrice"
+                           placeholder="@string.Format("Đơn giá")"
+                           class="form-control Isnumber pt-5 wpx120 moneyFormat">
+                </div>
+            </td>
+            <td title="@string.Format("Số lượng")">
+                <div class="form-group has-feedback">
+                    <input name="ProductAmount" type="text" data-originname="Amount"
+                           placeholder="@string.Format("Số lượng")"
+                           class="form-control Isnumber pt-5 calTotal wpx100 moneyFormat">
+                </div>
+            </td>
+            <td title="@string.Format("Khuyến mại")">
+                <div class="form-group has-feedback">
+                    <input name="ProductPromotion" value="0" type="text" data-originname="ProductPromotion"
+                           placeholder="0"
+                           class="form-control Isnumber pt-5 calTotal wpx120 moneyFormat">
+                </div>
+            </td>
+            <td title="@string.Format("Thành tiền")">
+                <div class="form-group has-feedback">
+                    <input name="Total" type="text" value="0" data-originname="Total"
+                           placeholder="@string.Format("Thành tiên")"
+                           class="form-control Isnumber pt-5 wpx120 moneyFormat">
+                </div>
+            </td>
+            <td>
+                <a class="btn btn-link deleteItem" title="@string.Format("Hủy")" href="javascript:void(0);">
+                    <i class="fa fa-remove red"></i>
+                </a>
+            </td>
+        </tr>
+    </script>
+</form>
+
+<style>
+    .has-feedback .form-control {
+        padding-right: initial;
+    }
+</style>
+

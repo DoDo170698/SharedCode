@@ -1,0 +1,60 @@
+﻿@model ProductModel
+@{ 
+    Layout = null;
+}
+<form id="FrmCrPO" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+      title="@ViewBag.Title" action="@Model.Url" class="form-horizontal bv-form validateForm quickSubmit useScrollBar" method="post" novalidate="novalidate">
+    <div class="container-fluid">
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Loại hàng hóa")</label>
+            <div class="col-lg-8">
+                <input  class="form-control autocompleteCategory"
+                       name="TypeFake" placeholder="Loại hàng hóa" title="Đơn vị tính" type="text" value="@Model.ProductType.Name"
+                       data-type="2" data-parent="0" data-targetid="@("#Type"+Model.Product.ID)">
+                <input  type="hidden" id="@("Type"+Model.Product.ID)" name="Type" value="@Model.Product.Type" />
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Tên hàng hóa")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Name", Model.Product.Name, "Tên hàng hóa", "Tên hàng hóa", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Mã hàng hóa")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "Code", Model.Product.Code, "Mã hàng hóa", "Mã hàng hóa", true))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("BarCode")</label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("", "BarCode", Model.Product.BarCode, "BarCode", "BarCode", false))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Đơn vị tính")</label>
+            <div class="col-lg-8">
+                <input  class="form-control autocompleteCategory"
+                       name="CalUnitFake" placeholder="Đơn vị tính" title="Đơn vị tính" type="text" value="@Model.CalUnit.Name"
+                       data-type="1" data-parent="0" data-targetid="@("#calUnuit"+Model.Product.ID)">
+                <input id="@("calUnuit"+Model.Product.ID)" type="hidden"  name="CalUnit" value="@Model.Product.CalUnit" />
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Đơn giá")</label>
+            <div class="col-lg-8">
+                <input id="@("Price"+Model.Product.ID)" class="form-control moneyFormat"
+                       name="Price" placeholder="Đơn giá" title="Đơn giá" type="text" value="@( Model.Product.Price> 0 ?string.Format("{0:0,0}",Model.Product.Price):"0")">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <p id="messeage_err" class="red"></p>
+                <input type="hidden" value="@Model.Product.ID" name="ID" />
+                <button type="submit" class="btn btn-info btn-sm">@string.Format("Xong")</button>
+            </div>
+        </div>
+    </div>
+</form>
+

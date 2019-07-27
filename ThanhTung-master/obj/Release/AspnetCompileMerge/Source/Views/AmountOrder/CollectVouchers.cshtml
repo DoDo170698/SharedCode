@@ -1,0 +1,92 @@
+﻿@model OrderModel
+@{
+    Layout = null;
+    var billFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Bill));
+    var declarationFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Declaration));
+    var orderFile = Model.OrderFiles.FirstOrDefault(t => t.Type == (int)(Enums.OrderFileType.Order));
+}
+<form id="FrmIRV" action="@Model.Url" title="@ViewBag.Title"
+      accept-charset="utf-8" enctype="multipart/form-data" class="form-horizontal form-group-sm frm-df frm-rm form-delete quickSubmit" method="POST">
+    <div class="container-fluid pt-0">
+        <div class="form-group form-group-title">
+            <div class="col-sm-12 txtct">
+                <label class="control-label title">@ViewBag.Title</label>
+            </div>
+        </div>
+        <div class="form-group form-group-name">
+            <div class="col-sm-12 txtct ">
+                <label class="control-label name center" title=""><b>@ViewBag.CollectionContent</b> </label>
+            </div>
+        </div>
+        <div class="form-group form-group-name">
+            <div class="col-sm-3 txtct ">
+                <label class="control-label">
+                    @string.Format("File bảng kê")
+                </label>
+            </div>
+            <div class="col-sm-9 txtct ">
+                <div id="Declaration_@Model.Order.ID" class="files aa_upload_file file-up">
+                    <a class="clickInputFile icon-upload-left" href="#"
+                       data-click="#upfile_normal"
+                       data-size="1" data-type="append"
+                       data-target="#Declaration_@Model.Order.ID">
+                        <i aria-hidden="true" title="Tải file" class="fa fa-download no-padding"></i>
+                    </a>
+                    @if (!Equals(declarationFile, null) && declarationFile.ID > 0)
+                    {
+                        var fileName = declarationFile.FileName;
+                        var path = declarationFile.Path;
+                        var fullPath = SystemConfig.GetValueByKey("FileFolder") + @"\" + path;
+                        var link = "/UpFileNormal/Download?Path=" + fullPath + "&FileName=" + fileName;
+                        <span class="fileitem member sortitem">
+                            <a class="text-left openLink" href="@link" title="">@fileName</a>
+                            <input type="hidden" name="FileName" class="fileNames" value="@fileName">
+                            <input name="Path" class="filePaths" type="hidden" value="@path">
+                            <button type="button" class="btn btn-xs btn-link close delMemberCust">x</button>
+                        </span>
+                    }
+                </div>
+                <input type="hidden" name="Type" value="@((int)(Enums.OrderFileType.Declaration))" />
+            </div>
+        </div>
+        <div class="form-group form-group-name">
+            <div class="col-sm-3 txtct ">
+                <label class="control-label">
+                    @string.Format("File hóa đơn")
+                </label>
+            </div>
+            <div class="col-sm-9 txtct ">
+                <div id="Bill_@Model.Order.ID" class="files aa_upload_file file-up">
+                    <a class="clickInputFile icon-upload-left" href="#"
+                       data-click="#upfile_normal"
+                       data-size="1" data-type="append"
+                       data-target="#Bill_@Model.Order.ID">
+                        <i aria-hidden="true" title="Tải file" class="fa fa-download no-padding"></i>
+                    </a>
+                    @if (!Equals(billFile, null) && billFile.ID > 0)
+                    {
+                        var fileName = billFile.FileName;
+                        var path = declarationFile.Path;
+                        var fullPath = SystemConfig.GetValueByKey("FileFolder") + @"\" + path;
+                        var link = "/UpFileNormal/Download?Path=" + fullPath + "&FileName=" + fileName;
+                        <span class="fileitem member sortitem">
+                            <a class="text-left openLink" href="@link" title="">@fileName</a>
+                            <input type="hidden" name="FileName" class="fileNames" value="@fileName">
+                            <input name="Path" class="filePaths" type="hidden" value="@path">
+                            <button type="button" class="btn btn-xs btn-link close delMemberCust">x</button>
+                        </span>
+                    }
+                </div>
+                <input type="hidden" name="Type" value="@((int)(Enums.OrderFileType.Bill))" />
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="col-sm-12 txtct">
+                <p id="messeage_err" class="red"></p>
+                <input type="hidden" name="ID" value="@Model.Order.ID" />
+                <button class="btn btn-azure  btn-sm" type="submit">@string.Format("Xác nhận")</button>
+                <button class="btn btn-default btn-sm closeDialog" type="button">@string.Format("Hủy")</button>
+            </div>
+        </div>
+    </div>
+</form>

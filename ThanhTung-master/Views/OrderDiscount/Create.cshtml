@@ -1,0 +1,104 @@
+﻿@model OrderDiscountModel
+@{
+    Layout = null;
+}
+<form id="FrmCrPO" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+      title="@ViewBag.Title" action="@Model.Url" class="form-horizontal bv-form validateForm quickSubmit useScrollBar" method="post" novalidate="novalidate">
+    <div class="container-fluid">
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Mã chiết khấu")<span class="red">*</span></label>
+            <div class="col-lg-4">
+                @(Html.CusTextBox("", "Code", Model.OrderDiscount.Code, "Mã chiết khấu", "Mã chiết khấu", true))
+            </div>
+            <div class="col-lg-4">
+                @Html.CusDropDownListByStatus("Type_" + Model.OrderDiscount.ID, "Type", null, null, (int)(Enums.MvcStringRender.OrderType), Model.OrderTypes.Select(t => new SelectListItem { Text = t.Value, Value = t.Key.ToString(), Selected = Model.OrderDiscount.Type == t.Key }),
+               new
+               {
+                    @data_target = "#IDCutomer_" + Model.OrderDiscount.ID
+                }
+                , false, "trigger_customer_select_change")
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Khách hàng")</label>
+            <div class="col-lg-8">
+                @Html.CusDropdownList("IDCutomer_" + Model.OrderDiscount.ID, "IDCustomer", "Khách hàng", Model.Customers.Select(t => new SelectListItem { Text = t.Name, Value = t.ID.ToString(), Selected = t.ID == Model.OrderDiscount.IDCustomer }),
+               new
+                    {
+                     @class = "form-control selectpicker customer_select_change",
+                     @data_live_search = "true",
+                     @data_target = "#table_order_detail",
+                     @data_url = string.Format("/OrderDiscount/GetOrder?IDOrderDiscount={0}", Model.OrderDiscount.ID),
+                     @data_year = "#id_Year_" + Model.OrderDiscount.ID,
+                     @data_quater = "#id_Quater_" + Model.OrderDiscount.ID,
+                     @data_input = "#data-value" + Model.OrderDiscount.ID,
+                     @data_type = "#Type_" + Model.OrderDiscount.ID
+               })
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Thời điểm")</label>
+            <div class="col-lg-4">
+                @(Html.CusDropDownListByStatus("id_Quater_" + Model.OrderDiscount.ID, "Quater", null, null, (int)(Enums.MvcStringRender.Quater), Model.Quaters.Select(t => new SelectListItem { Text = t.Value, Value = t.Key.ToString(), Selected = t.Key == Model.OrderDiscount.Quater }).ToList(),
+                new
+                        {
+
+                    @data_target = "#IDCutomer_" + Model.OrderDiscount.ID
+                }
+                , false, "trigger_customer_select_change"))
+            </div>
+            <div class="col-lg-4">
+                @Html.CusDropdownList("id_Year_" + Model.OrderDiscount.ID, "Year", "Năm", Model.Years.Select(t => new SelectListItem { Text = t.ToString(), Value = t.ToString(), Selected = t == Model.OrderDiscount.Year }),
+               new
+                    {
+                   @class = "form-control selectpicker trigger_customer_select_change",
+                   @data_target = "#IDCutomer_" + Model.OrderDiscount.ID
+               })
+            </div>
+        </div>
+
+        <div class="form-group has-feedback" id="table_order_detail" data-value="0">
+            @if (Model.OrderDiscount.ID > 0)
+            {
+                @Html.Partial("Orders", Model)
+            }
+
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("% chiết khấu")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("Percent_" + Model.OrderDiscount.ID, "Percent", Model.OrderDiscount.Percent, "% chiết khấu", "% chiết khấu", true, null, 0, "trigger_cal_OrderDiscount"))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Hỗ trợ Event")<span class="red">*</span></label>
+            <div class="col-lg-8">
+                @(Html.CusTextBox("Event_" + Model.OrderDiscount.ID, "EventMoney", Model.OrderDiscount.Event > 0 ? string.Format("{0:0,0}", Model.OrderDiscount.Event) : "0", "Hỗ trợ Evennt", "Hỗ trợ Event", true, null, 0, "moneyFormat Isnumber trigger_cal_OrderDiscount"))
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="col-lg-4 control-label">@string.Format("Tổng tiền")<span class="red">*</span></label>
+            <div class="col-lg-4 red">
+                @(Html.CusTextBox("Total_" + Model.OrderDiscount.ID, "TotalMoney", Model.OrderDiscount.Total > 0 ? string.Format("{0:0,0}", Model.OrderDiscount.Total) : "0", "Tổng tiền", "Tổng tiền", true, null, 0, "moneyFormat Isnumber trigger_cal_OrderDiscount input-red"))
+            </div>
+            <div class="col-lg-4 success">
+                @(Html.CusTextBox("RealTotal_" + Model.OrderDiscount.ID, "RealTotalMoney", Model.OrderDiscount.RealTotal > 0 ? string.Format("{0:0,0}", Model.OrderDiscount.RealTotal) : "0", "Tổng tiền sau  chiết khấu", "Tổng tiền sau  chiết khấu", true, null, 0, "moneyFormat Isnumber trigger_cal_OrderDiscount input-green"))
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <p id="messeage_err" class="red"></p>
+                <input type="hidden" value="@Model.OrderDiscount.ID" name="ID" />
+
+                <input class="cal_OrderDiscount" type="hidden" id="input_value_" @Model.OrderDiscount.ID
+                       data-event=@string.Format("#Event_{0}",Model.OrderDiscount.ID)
+                       data-discount=@string.Format("#Percent_{0}",Model.OrderDiscount.ID)
+                       data-total=@string.Format("#Total_{0}",Model.OrderDiscount.ID)
+                       data-real-total=@string.Format("#RealTotal_{0}",Model.OrderDiscount.ID) />
+                <button type="submit" class="btn btn-info btn-sm">@string.Format("Xong")</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+

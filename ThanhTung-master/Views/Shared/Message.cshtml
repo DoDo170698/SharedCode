@@ -1,0 +1,52 @@
+﻿@if (Session["Success"] != null)
+{
+    <div class="row flash flash-success">
+        <ul>
+            @foreach (var message in (List<string>)Session["Success"])
+            {
+                <li>@message</li>
+            }
+        </ul>
+        <i class="ui-icon ui-icon-closethick close-flash"></i>
+    </div>
+    Session["Success"] = null;
+}
+@if (Session["Notifies"] != null)
+{
+    <div class="row flash flash-notifies">
+        <ul>
+            @foreach (var message in (List<string>)Session["Notifies"])
+            {
+                <li>@message</li>
+            }
+        </ul>
+        <i class="ui-icon ui-icon-closethick close-flash"></i>
+    </div>
+    Session["Notifies"] = null;
+}
+@if (Session["Errors"] != null)
+{
+    <div class="row flash flash-error">
+        <ul>
+            @foreach (var message in (List<string>)Session["Errors"])
+            {
+                <li>@message</li>
+            }
+        </ul>
+        <i class="ui-icon ui-icon-closethick close-flash"></i>
+    </div>
+    Session["Errors"] = null;
+}
+@if (Session["Warns"] != null)
+{
+    <div class="row flash flash-warn">
+        <ul>
+            @foreach (var message in (List<string>)Session["Warns"])
+            {
+                <li>@message</li>
+            }
+        </ul>
+        <i class="ui-icon ui-icon-closethick close-flash"></i>
+    </div>
+    Session["Warns"] = null;
+}

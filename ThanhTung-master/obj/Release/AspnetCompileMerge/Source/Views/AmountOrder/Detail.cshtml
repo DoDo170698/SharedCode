@@ -1,0 +1,289 @@
+﻿@model OrderModel
+<div class="page-breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <a href="/home"><i class="fa fa-home"></i>@string.Format("Tổng quan")</a>
+        </li>
+        <li>
+            @if (Model.IsAD)
+            {
+                <a href="/AccountingDept">@string.Format("Phòng kế toán")</a>
+
+            }
+            else
+            {
+                <a href=@CUtils.GetLinkByStatus(Model.Order.Status,"AmountOrder")>@string.Format("Danh sách đơn hàng")</a>
+
+            }
+        </li>
+        <li class="active">
+            @Model.Order.PONo
+        </li>
+    </ul>
+</div>
+<div class="page-body">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <span class="widget-caption"><i class="fa fa-book" aria-hidden="true"></i>@string.Format("Đơn hàng: {0}", Model.Order.PONo)</span>
+                    <div class="widget-buttons">
+                        <a data-toggle="maximize" href="#"><i class="fa fa-expand"></i></a>
+                        <a data-toggle="collapse" href="#"><i class="fa fa-minus"></i></a>
+                    </div>
+                </div>
+                <div class="widget-body no-padding">
+                    <div class="dataTables_wrapper form-inline">
+                        <div class="divContainer">
+                            <div class="job_search_table project_ManagerMain_table no-padding-bottom">
+                                <div class="job_search_cell job_search_quickview">
+                                    <div class="job_search_quickview_content nopad">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs" id="tabJobInfo">
+                                                <li class="@(Equals(Model.Tab,"device_OverViews")? "active" :"") ">
+                                                    <a data-toggle="tab" href="#device_OverViews" aria-expanded="true" class="tabClick" data-tab-name="device_OverViews">
+                                                        <i class="fa fa-info-circle" aria-hidden="true"></i>@string.Format("Thông tin đơn hàng")
+                                                    </a>
+                                                </li>
+                                                <li class="@(Equals(Model.Tab,"device_HistoryLogs")? "active" :"")">
+                                                    <a data-toggle="tab" href="#device_HistoryLogs" aria-expanded="false" class="tabClick quickTabUpdate" data-tab-name="device_HistoryLogs">
+                                                        <i class="fa fa-history" aria-hidden="true"></i>Lịch sử đơn hàng
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="tab-content no-margin-bottom no-padding no-box-shadow">
+                                                <div id="device_OverViews" class="tab-pane @(Equals(Model.Tab,"device_OverViews")? "active" :"")">
+                                                    <div class="project_ManagerMain">
+                                                        <div class="jobQuickview_header">
+                                                            <div class="timeline-header">
+                                                                <div class="card-profile-title">
+                                                                    <span class="left-avatar-profile"><a href="#"><img height="30" src="/Assets/app/img/task.svg"></a></span>
+                                                                    <span class="timeline-title">
+                                                                        <span class="jobQuickview_title">
+                                                                            @Model.Order.PONo
+                                                                        </span>
+                                                                        <span class="d-block"><i class="fa fa-fw fa-bookmark-o" title="Ngày đặt hàng"></i>@Utils.DateToString(Model.Order.PODate)</span>
+                                                                        <span class="d-block"><i class="fa fa-fw fa-calendar" title="Ngày giao hàng"></i>@Utils.DateToString(Model.Order.DeliveryDate)</span>
+                                                                    </span>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="jobQuickview_table issue-body-content">
+                                                            <div class="jobQuickview_cell jobQuickview_cell_left">
+                                                                <div class="module toggle-wrap">
+                                                                    <div class="mod-header">
+                                                                        <h2 class="toggle-title">@string.Format("Thông tin hóa đơn")</h2>
+                                                                    </div>
+                                                                    <div class="mod-content module_cmt">
+                                                                        <div>
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <dl class="editable-hover">
+                                                                                        <dt><i class="hidden fa fa-fw fa-bookmark-o" aria-hidden="true"></i>@string.Format("Số hóa đơn: ")</dt>
+                                                                                        <dd>@Model.Order.PONo</dd>
+                                                                                    </dl>
+                                                                                </li>
+
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Ngày đặt hàng: ")</dt>
+                                                                                        <dd>
+                                                                                            @Utils.DateToString(Model.Order.PODate) -   @Utils.DateToString(Model.Order.PODate, "HH:mm")
+
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-calendar" aria-hidden="true"></i>@string.Format("Ngày giao hàng: ")</dt>
+                                                                                        <dd>
+                                                                                            @Utils.DateToString(Model.Order.DeliveryDate) -  @Utils.DateToString(Model.Order.DeliveryDate, "HH:mm")
+                                                                                        </dd>
+
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Người giao hàng: ")</dt>
+                                                                                        <dd>@Model.Order.Purchaser</dd>
+
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("SĐT: ")</dt>
+                                                                                        <dd>@Model.Order.Tel</dd>
+
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Email: ")</dt>
+                                                                                        <dd>
+                                                                                            @Model.Order.Email
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-usd" aria-hidden="true"></i><b>@string.Format("Tiền đơn hàng: ")</b></dt>
+                                                                                        <dd><b>@(Model.Order.Value > 0 ? string.Format("{0:0,0} VNĐ", Model.Order.Value) : "0")</b> </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-usd" aria-hidden="true"></i><b>@string.Format("Tiền đơn hàng thực tế: ")</b> </dt>
+                                                                                        <dd><b>@(Model.Order.RealValue > 0 ? string.Format("{0:0,0} VNĐ", Model.Order.RealValue) : "0")</b> </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="address">Địa chỉ</label>
+                                                                    <textarea type="text" class="form-control" id="address">@Model.Order.Address</textarea>
+                                                                    <label for="note" class="mt-10">Ghi chú</label>
+                                                                    <textarea type="text" class="form-control" id="note">@Model.Order.Note</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="jobQuickview_cell jobQuickview_cell_right dropabQLKD">
+                                                                <div class="module toggle-wrap">
+                                                                    <div class="mod-header">
+                                                                        <h2 class="toggle-title">@string.Format("Trạng thái hóa đơn")</h2>
+                                                                    </div>
+                                                                    <div class="mod-content">
+                                                                        <div class="timeline_job_item_status" style="height: 42px;">
+                                                                            @CUtils.RenderOderStatus(Model.Order.Status)
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="module toggle-wrap">
+                                                                    <div class="mod-header">
+                                                                        <h2 class="toggle-title">@string.Format("Thông tin khách hàng")</h2>
+                                                                    </div>
+                                                                    <div class="mod-content module_cmt">
+                                                                        <div>
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Tên khách hàng:") </dt>
+                                                                                        <dd>
+                                                                                            <span>@Model.Customer.Name</span>
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Địa chỉ: ") </dt>
+                                                                                        <dd>
+                                                                                            @Model.Customer.Address
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="module toggle-wrap">
+                                                                    <div class="mod-header">
+                                                                        <h2 class="toggle-title">@string.Format("Thông tin khách hàng")</h2>
+                                                                    </div>
+                                                                    <div class="mod-content module_cmt">
+                                                                        <div>
+                                                                            <ul>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Tên nhà cung cấp:") </dt>
+                                                                                        <dd>
+                                                                                            <span>@Model.Supplier.Name</span>
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <dl>
+                                                                                        <dt><i class="hidden fa fa-fw fa-university" aria-hidden="true"></i>@string.Format("Địa chỉ: ") </dt>
+                                                                                        <dd>
+                                                                                            @Model.Supplier.Address
+                                                                                        </dd>
+                                                                                    </dl>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mod-header">
+                                                                        <h2 class="toggle-title">@string.Format("File đính kèm")</h2>
+                                                                    </div>
+                                                                    <div class="mod-content module_cmt">
+                                                                        <div>
+                                                                            <ul>
+                                                                                @if (!Equals(Model.OrderFiles, null))
+                                                                                {
+                                                                                    foreach (var item in Model.OrderFiles)
+                                                                                    {
+                                                                                        var path = SystemConfig.GetValueByKey("FileFolder") + @"\" + item.Path;
+                                                                                        var link = "/UpFileNormal/Download?Path=" + path + "&FileName=" + item.FileName;
+                                                                                        <li>
+                                                                                            <dl>
+                                                                                                <dt>
+                                                                                                    @(Utils.GetDescription<Enums.OrderFileType>(item.Type))
+                                                                                                </dt>
+                                                                                                <dd>
+                                                                                                    <span class="fileitem member">
+                                                                                                        <a target="_blank" href=@link>@item.FileName</a>
+                                                                                                    </span>
+                                                                                                </dd>
+
+                                                                                            </dl>
+
+                                                                                        </li>
+
+                                                                                    }
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="module toggle-wrap">
+                                                        <div class="mod-header">
+                                                            <h4 class="toggle-title">@string.Format("Các sản phẩm có trong đơn hàng")</h4>
+                                                        </div>
+                                                        <div class="mod-content">
+                                                            <div class="jSearch_at">
+                                                                <div class="form-group">
+                                                                    <div class="col-lg-12">
+                                                                        <div class="over_auto">
+                                                                            @Html.Partial("ProductOrders", Model)
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="device_HistoryLogs" class="tab-pane JobHistories @(Equals(Model.Tab,"device_HistoryLogs")? "active" :"")">
+                                                    @Html.Partial("History", Model)
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
